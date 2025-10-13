@@ -6,8 +6,9 @@ import { CollectionPagination } from "@/components/collection-pagination";
 import TopActions from "@/components/top-actions";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Form } from "@inertiajs/react";
+import { Form, Link } from "@inertiajs/react";
 import SortableTableHead from "@/components/sortable-table-head";
+import { EditIcon, TrashIcon } from "lucide-react";
 
 type Props = {
     q: string | null
@@ -26,7 +27,7 @@ export default withAppLayout(breadcrumbs, ({ collection, q }: Props) => {
     return (
         <div className="space-y-4">
             <TopActions>
-                <Form href={ingredients.index().url} className="flex gap-2 items-center">
+                <Form {...ingredients.index.form()} className="flex gap-2 items-center">
                     <Input autoFocus placeholder="Rechercher un ingrédient" name="q" defaultValue={q ?? ''} />
                     <Button>Rechercher</Button>
                 </Form>
@@ -37,16 +38,32 @@ export default withAppLayout(breadcrumbs, ({ collection, q }: Props) => {
                     <TableRow>
                         <SortableTableHead field="id">ID</SortableTableHead>
                         <SortableTableHead field="name">Nom</SortableTableHead>
-                        <TableHead>Actions</TableHead>
+                        <TableHead className="text-end">Actions</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {collection.data.map((item) => (
                         <TableRow key={item.id}>
                             <TableCell>{item.id}</TableCell>
-                            <TableCell>{item.name}</TableCell>
                             <TableCell>
-                                {/* TODO Actions (Edit, Delete, etc.) can be added here */}
+                                <Link className="hover:underline" href={ingredients.edit({ ingredient: item.id })} >
+                                    {item.name}
+                                </Link>
+                            </TableCell>
+                            <TableCell>
+                                <div className="flex items-center justify-end gap-1">
+                                    <Button asChild size={'icon'} variant={'outline'}>
+                                        <Link href={ingredients.edit({ ingredient: item.id })} >
+                                            <EditIcon size={16} />
+                                        </Link>
+                                    </Button>
+
+                                    <Button asChild size={'icon'} variant={'destructive-outline'}>
+                                        <Link href={ingredients.destroy({ ingredient: item.id })} onBefore={() => confirm('Voulez vous vraiment supprimer cet ingrédient ?')}>
+                                            <TrashIcon size={16} />
+                                        </Link>
+                                    </Button>
+                                </div>
                             </TableCell>
                         </TableRow>
                     ))}

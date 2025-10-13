@@ -60,7 +60,9 @@ class IngredientController extends Controller
      */
     public function edit(Ingredient $ingredient)
     {
-        //
+        return Inertia::render('ingredients/form', [
+            'ingredient' => new IngredientResource($ingredient)
+        ]);
     }
 
     /**
@@ -68,7 +70,8 @@ class IngredientController extends Controller
      */
     public function update(UpdateIngredientRequest $request, Ingredient $ingredient)
     {
-        //
+        $ingredient->update($request->validated());
+        return to_route('ingredients.index')->with('success', "L'ingrédient a bien été mis à jour.");
     }
 
     /**
@@ -76,6 +79,7 @@ class IngredientController extends Controller
      */
     public function destroy(Ingredient $ingredient)
     {
-        //
+        $ingredient->delete();
+        return to_route('ingredients.index')->with('success', "L'ingrédient a bien été supprimé.");
     }
 }
