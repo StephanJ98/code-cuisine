@@ -16,7 +16,7 @@ class IngredientController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Ingredient::query();
+        $query = Ingredient::query()->orderFromRequest($request);
         $search = $request->get('q');
 
         if ($search) {

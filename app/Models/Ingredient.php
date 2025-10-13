@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Enum\IngredientUnit;
+use App\Models\Traits\HasSortable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,10 +19,17 @@ class Ingredient extends Model
 {
     /** @use HasFactory<\Database\Factories\IngredientFactory> */
     use HasFactory;
+    use HasSortable;
 
     protected $fillable = [
         'name',
         'unit',
+    ];
+
+    protected $sortable = [
+        'name',
+        'unit',
+        'id'
     ];
 
     protected $casts = [

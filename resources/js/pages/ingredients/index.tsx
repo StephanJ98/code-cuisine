@@ -7,6 +7,7 @@ import TopActions from "@/components/top-actions";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Form } from "@inertiajs/react";
+import SortableTableHead from "@/components/sortable-table-head";
 
 type Props = {
     q: string | null
@@ -34,8 +35,8 @@ export default withAppLayout(breadcrumbs, ({ collection, q }: Props) => {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>ID</TableHead>
-                        <TableHead>Nom</TableHead>
+                        <SortableTableHead field="id">ID</SortableTableHead>
+                        <SortableTableHead field="name">Nom</SortableTableHead>
                         <TableHead>Actions</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -45,7 +46,7 @@ export default withAppLayout(breadcrumbs, ({ collection, q }: Props) => {
                             <TableCell>{item.id}</TableCell>
                             <TableCell>{item.name}</TableCell>
                             <TableCell>
-                                {/* Actions (Edit, Delete, etc.) can be added here */}
+                                {/* TODO Actions (Edit, Delete, etc.) can be added here */}
                             </TableCell>
                         </TableRow>
                     ))}
