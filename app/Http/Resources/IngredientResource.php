@@ -25,6 +25,8 @@ class IngredientResource extends JsonResource
             'id' => $this->resource->id,
             'name' => $this->resource->name,
             'unit' => $this->resource->unit,
+            'unit_label' => $this->resource->unit->label(),
+            'image' => $this->resource->getFirstMediaUrl('image', 'thumb'),
         ];
     }
 }

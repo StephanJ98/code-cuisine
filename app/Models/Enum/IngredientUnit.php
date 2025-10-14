@@ -24,4 +24,12 @@ enum IngredientUnit: string
             self::None => "",
         };
     }
+
+    public static function getOptions(): array
+    {
+        return array_map(fn(self $unit) => [
+            'value' => $unit->value,
+            'label' => $unit->label() ?: 'Aucune quantité',
+        ], self::cases());
+    }
 }

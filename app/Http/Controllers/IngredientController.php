@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ingredient;
-use App\Http\Requests\StoreIngredientRequest;
-use App\Http\Requests\UpdateIngredientRequest;
+use App\Http\Requests\FormIngredientRequest;
 use App\Http\Resources\IngredientResource;
+use App\Models\Enum\IngredientUnit;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Inertia\Inertia;
 
 class IngredientController extends Controller
@@ -36,15 +37,20 @@ class IngredientController extends Controller
      */
     public function create()
     {
-        //
+        $ingredient = new Ingredient([
+            'unit' => IngredientUnit::None,
+        ]);
+        return $this->edit($ingredient);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreIngredientRequest $request)
+    public function store(FormIngredientRequest $request)
     {
-        //
+        $ingredient = Ingredient::create($request->validated());
+        $this->handleFormRequest($request, $ingredient);
+        return to_route('ingredients.index')->with('success', "L'ingrédient a bien été créé.");
     }
 
     /**
@@ -61,16 +67,18 @@ class IngredientController extends Controller
     public function edit(Ingredient $ingredient)
     {
         return Inertia::render('ingredients/form', [
-            'ingredient' => new IngredientResource($ingredient)
+            'ingredient' => new IngredientResource($ingredient),
+            'units' => IngredientUnit::getOptions()
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateIngredientRequest $request, Ingredient $ingredient)
+    public function update(FormIngredientRequest $request, Ingredient $ingredient)
     {
         $ingredient->update($request->validated());
+        $this->handleFormRequest($request, $ingredient);
         return to_route('ingredients.index')->with('success', "L'ingrédient a bien été mis à jour.");
     }
 
@@ -81,5 +89,13 @@ class IngredientController extends Controller
     {
         $ingredient->delete();
         return to_route('ingredients.index')->with('success', "L'ingrédient a bien été supprimé.");
+    }
+
+    private function handleFormRequest(FormIngredientRequest $request, Ingredient $ingredient)
+    {
+        $image = $request->validated('image');
+        if ($image && $image instanceof UploadedFile) {
+            $ingredient->addMedia($image)->toMediaCollection('image');
+        }
     }
 }
