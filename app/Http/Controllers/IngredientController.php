@@ -91,6 +91,9 @@ class IngredientController extends Controller
         return to_route('ingredients.index')->with('success', "L'ingrédient a bien été supprimé.");
     }
 
+    /**
+     * Handle the form request for creating or updating an ingredient.
+     */
     private function handleFormRequest(FormIngredientRequest $request, Ingredient $ingredient)
     {
         $image = $request->validated('image');

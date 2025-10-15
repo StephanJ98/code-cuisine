@@ -1,6 +1,7 @@
 import TopActions from "@/components/top-actions";
 import { Button } from "@/components/ui/button";
 import { FormField } from "@/components/ui/form-field";
+import ImageInput from "@/components/ui/image-input";
 import { Input } from "@/components/ui/input";
 import SelectWithItems, { SelectOption } from "@/components/ui/select-with-items";
 import { withAppLayout } from "@/layouts/app-layout";
@@ -31,9 +32,18 @@ export default withAppLayout<Props>(breadcrumbs, ({ ingredient, units }) => {
 
     return (
         <Form {...action} className="space-y-4">
-            {({ errors, processing }) => (
+            {({ errors, processing, progress }) => (
                 <>
-                    <Input type="file" name="image" />
+                    <FormField label="Image" htmlFor='image' error={errors['image']}>
+                        <ImageInput
+                            id="image"
+                            className="w-40 aspect-square"
+                            name="image"
+                            aria-invalid={!!errors['image']}
+                            defaultValue={ingredient.image}
+                            progress={progress?.progress}
+                        />
+                    </FormField>
 
                     <FormField label="Nom" htmlFor='name' error={errors['name']}>
                         <Input defaultValue={ingredient.name} id="name" name="name" aria-invalid={!!errors['name']} />
