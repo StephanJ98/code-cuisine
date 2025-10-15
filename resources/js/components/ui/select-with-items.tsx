@@ -17,7 +17,7 @@ export type SelectOption = {
 const SelectWithItems = ({ items = [], name, className, defaultValue, placeholder, ...props }: Props) => {
     return (
         <Select name={name} defaultValue={defaultValue}>
-            <SelectTrigger {...props}>
+            <SelectTrigger {...props} className={className}>
                 <SelectValue placeholder={placeholder} />
             </SelectTrigger>
             <SelectContent>

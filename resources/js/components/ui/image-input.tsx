@@ -46,7 +46,8 @@ const ImageInput = ({ defaultValue, className, progress, ...props }: Props) => {
                 size={16}
                 className={cn(
                     "group-hover:text-primary group-hover:scale-150 ease-in-out transition-all",
-                    hover && "text-primary scale-150"
+                    hover && "text-primary scale-150",
+                    !preview && 'z-10'
                 )}
             />
 
