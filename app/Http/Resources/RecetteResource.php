@@ -2,14 +2,10 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Ingredient;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/**
- * @property Ingredient $resource
- */
-class IngredientResource extends JsonResource
+class RecetteResource extends JsonResource
 {
     public static $wrap = null;
 
@@ -23,8 +19,11 @@ class IngredientResource extends JsonResource
         return [
             'id' => $this->resource->id,
             'name' => $this->resource->name,
-            'unit' => $this->resource->unit,
-            'unit_label' => $this->resource->unit->label(),
+            'description' => $this->resource->description,
+            'duration' => $this->resource->duration,
+            'persons' => $this->resource->persons,
+            'level' => $this->resource->level,
+            'level_label' => $this->resource->level->label(),
             'image' => $this->resource->getFirstMediaUrl('image', 'thumb'),
         ];
     }

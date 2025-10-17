@@ -73,3 +73,14 @@ export interface Ingredient {
     unit_label: string;
     image?: string;
 }
+
+export interface Recette {
+    id: number;
+    name: string;
+    duration: string;
+    persons: number;
+    level: string;
+    level_label: string;
+    description: string;
+    image?: string;
+}
