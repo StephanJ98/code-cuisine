@@ -6,9 +6,11 @@ use App\Http\Requests\FormRecetteRequest;
 use App\Models\Recette;
 use App\Http\Requests\StoreRecetteRequest;
 use App\Http\Requests\UpdateRecetteRequest;
+use App\Http\Resources\IngredientResource;
 use App\Http\Resources\RecetteDetailResource;
 use App\Http\Resources\RecetteResource;
 use App\Models\Enum\RecetteDifficulty;
+use App\Models\Ingredient;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Inertia\Inertia;
@@ -68,8 +70,9 @@ class RecetteController extends Controller
     public function edit(Recette $recette)
     {
         return Inertia::render('recettes/form', [
-            'recette' => new RecetteDetailResource($recette),
-            'levels' => RecetteDifficulty::getOptions(),
+            'recette' => fn() => new RecetteDetailResource($recette),
+            'levels' => fn() => RecetteDifficulty::getOptions(),
+            'ingredients' => Inertia::optional($this->ingredients(...)),
         ]);
     }
 
@@ -107,5 +110,14 @@ class RecetteController extends Controller
                 ->keyBy('id')
                 ->select('quantity')
         );
+    }
+
+    private function ingredients()
+    {
+        $search = request('q');
+        return IngredientResource::collection(
+            Ingredient::limit(10)
+                ->whereLike('name', '%' . $search . '%')->get()
+        )->collection;
     }
 }

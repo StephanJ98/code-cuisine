@@ -1,9 +1,17 @@
-import { RecipeIngredient } from "@/types"
+import { Ingredient, RecipeIngredient } from "@/types"
 import ValidationErrors from "../ui/validation-errors"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { TrashIcon } from "lucide-react"
+import {
+    Command, CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList
+} from "@/components/ui/command"
+import { router, usePage } from "@inertiajs/react"
 
 type Props = {
     ingredients: RecipeIngredient[],
@@ -41,8 +49,45 @@ const IngredientsField = (props: Props) => {
                 ))}
             </ul>
 
-
+            <IngredientsCombobox />
         </div>
+    )
+}
+
+const IngredientsCombobox = () => {
+    const page = usePage<{ ingredients: Ingredient[] }>()
+    const ingredients = page.props.ingredients || []
+    const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
+
+    const handleSearch = (s: string) => {
+        clearTimeout(timerRef.current)
+
+        router.cancelAll()
+
+        if (s.length < 2) return;
+
+        timerRef.current = setTimeout(() => {
+            router.reload({
+                only: ['ingredients'],
+                data: { q: s }
+            })
+        }, 300)
+    }
+
+    return (
+        <Command shouldFilter={false} >
+            <CommandInput onValueChange={handleSearch} placeholder="Ajouter un ingrédient" />
+            <CommandList>
+                <CommandEmpty>
+                    Aucun ingrédient trouvé.
+                </CommandEmpty>
+                <CommandGroup>
+                    {ingredients.map(i => (
+                        <CommandItem key={i.id}>{i.name}</CommandItem>
+                    ))}
+                </CommandGroup>
+            </CommandList>
+        </Command>
     )
 }
 
