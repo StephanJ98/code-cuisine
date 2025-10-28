@@ -19,7 +19,6 @@ class RecetteResource extends JsonResource
         return [
             'id' => $this->resource->id,
             'name' => $this->resource->name,
-            'description' => $this->resource->description,
             'duration' => $this->resource->duration,
             'persons' => $this->resource->persons,
             'level' => $this->resource->level,

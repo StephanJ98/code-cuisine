@@ -6,6 +6,7 @@ use App\Models\Enum\RecetteDifficulty;
 use App\Models\Traits\HasSortable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -30,8 +31,7 @@ class Recette extends Model implements HasMedia
         'name',
         'duration',
         'persons',
-        'level',
-        'id'
+        'level'
     ];
 
     protected $casts = [
@@ -49,5 +49,10 @@ class Recette extends Model implements HasMedia
     {
         $this->addMediaConversion('thumb')
             ->fit(Fit::Crop, 160, 160);
+    }
+
+    public function ingredients(): BelongsToMany
+    {
+        return $this->belongsToMany(Ingredient::class)->withPivot('quantity');
     }
 }

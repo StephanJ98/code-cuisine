@@ -6,6 +6,7 @@ use App\Http\Requests\FormRecetteRequest;
 use App\Models\Recette;
 use App\Http\Requests\StoreRecetteRequest;
 use App\Http\Requests\UpdateRecetteRequest;
+use App\Http\Resources\RecetteDetailResource;
 use App\Http\Resources\RecetteResource;
 use App\Models\Enum\RecetteDifficulty;
 use Illuminate\Http\Request;
@@ -67,7 +68,7 @@ class RecetteController extends Controller
     public function edit(Recette $recette)
     {
         return Inertia::render('recettes/form', [
-            'recette' => new RecetteResource($recette),
+            'recette' => new RecetteDetailResource($recette),
             'levels' => RecetteDifficulty::getOptions(),
         ]);
     }
@@ -100,5 +101,11 @@ class RecetteController extends Controller
         if ($image && $image instanceof UploadedFile) {
             $recette->addMedia($image)->toMediaCollection('image');
         }
+
+        $recette->ingredients()->sync(
+            collect($request->validated('ingredients'))
+                ->keyBy('id')
+                ->select('quantity')
+        );
     }
 }

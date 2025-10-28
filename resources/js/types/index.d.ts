@@ -77,10 +77,21 @@ export interface Ingredient {
 export interface Recette {
     id: number;
     name: string;
-    duration: string;
+    duration: number;
     persons: number;
     level: string;
     level_label: string;
+    image: string;
+}
+
+export interface RecipeIngredient {
+    id: number;
+    quantity: number | null;
+    unit_label: string;
+    name: string;
+}
+
+export interface RecetteDetail extends Recette {
     description: string;
-    image?: string;
+    ingredients: RecipeIngredient[]
 }

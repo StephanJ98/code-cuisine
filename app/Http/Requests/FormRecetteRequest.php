@@ -26,11 +26,14 @@ class FormRecetteRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'min:3', 'max:255'],
-            'description' => ['nullable', 'string', 'max:255'],
-            'duration' => ['required', 'string', 'min:2'],
+            'description' => ['required', 'string', 'max:255'],
+            'duration' => ['required', 'integer', 'min:1'],
             'persons' => ['required', 'integer', 'min:1'],
             'level' => ['required', Rule::enum(RecetteDifficulty::class)],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'], // max 2MB
+            'ingredients' => ['required', 'array', 'min:1'],
+            'ingredients.*.id' => ['required', 'integer', 'min:1'],
+            'ingredients.*.quantity' => ['nullable', 'integer', 'min:1'],
         ];
     }
 }
